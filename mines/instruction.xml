@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>134087458468278695</DateTime>
+  <GameVersion>0.2.5954.26176</GameVersion>
+  <Title>mines</Title>
+  <Description>​</Description>
+  <Author>Anders142536</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># setup
+alias bat d0
+alias gen d1
+alias con d3
+
+
+loop:
+
+# generator control
+l r0 bat Ratio         # Get charge level between 0 and 1
+s con Mode 1
+s con Setting r0
+
+bltal r0 0.1 startGenerator # &lt; 0.1 charge level
+bgtal r0 0.9 stopGenerator # &gt; 0.9 charge level
+
+# done
+sleep 1
+j loop
+
+
+startGenerator:
+s con Mode 10
+s con Setting STR("start")
+s gen On 1
+j ra
+
+
+stopGenerator:
+s con Mode 10
+s con Setting STR("stop")
+s gen On 0
+j ra</Instructions>
+</InstructionData>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>134090194036937053</DateTime>
+  <GameVersion>0.2.5954.26176</GameVersion>
+  <Title>solar tracking</Title>
+  <Description>​</Description>
+  <Author>Anders142536</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># setup
+alias dsen d0
+alias hor r1
+alias ver r2
+
+define solHash HASH("StructureSolarPanelReinforced")
+
+loop:
+
+# solar panels
+l hor dsen Horizontal
+l ver dsen Vertical
+
+# these have to be set based on daylight sensor direction
+add hor hor 90
+add ver ver 90
+
+sb solHash Horizontal hor
+sb solHash Vertical ver
+
+# done
+sleep 1
+j loop</Instructions>
+</InstructionData>

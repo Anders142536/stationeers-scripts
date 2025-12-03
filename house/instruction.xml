@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>134087448050600436</DateTime>
+  <GameVersion>0.2.5954.26176</GameVersion>
+  <Title>house</Title>
+  <Description>​</Description>
+  <Author>Anders142536</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>loop:
+
+alias CentrifugeOpen r14
+define BattDisplay HASH("LED Display (Large) Batt Charge")
+
+#Battery LCD
+lb r10 HASH("StructureBattery") Ratio Average
+sbn HASH("StructureConsoleLED1x3") BattDisplay Setting r10
+sbn HASH("StructureConsoleLED1x3") BattDisplay Mode 1 #Prozent
+#sb HASH("StructureBattery") On 1
+
+#Growlight
+sbn HASH("StructureDaylightSensor") HASH("Daylight Sensor Base") Mode 1
+lbn r10 HASH("StructureDaylightSensor") HASH("Daylight Sensor Base") Horizontal Average
+sbn HASH("StructureConsoleLED5") HASH("Debug1") Setting r10
+
+move r1 0
+ble r10 30 GrowLightEnd
+move r1 1
+GrowLightEnd:
+sb HASH("StructureGrowLight") On r1
+
+#Arc Furnace
+lbns r11 HASH("StructureArcFurnace") HASH("Arc Furnace") 0 Occupied Maximum
+sbn HASH("StructureArcFurnace") HASH("Arc Furnace") Activate r11
+
+#Recycler
+lbns r11 HASH("StructureRecycler") HASH("Recycler Base") 0 Occupied Maximum
+sbn HASH("StructureRecycler") HASH("Recycler Base") On r11
+
+
+#Centrifuges
+lb r0 HASH("StructureCentrifuge") Reagents Maximum
+sbn HASH("StructureConsoleLED5") HASH("Debug2") Setting r0
+
+blt r0 200 CentrifugeLt200
+move  CentrifugeOpen 1
+CentrifugeLt200:
+bgt r0 1 CentrifugeGt0
+move CentrifugeOpen 0
+CentrifugeGt0:
+sb HASH("StructureCentrifuge") Open CentrifugeOpen
+
+sleep 2
+
+j loop</Instructions>
+</InstructionData>
