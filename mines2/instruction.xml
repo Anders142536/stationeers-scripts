@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>134087458468278695</DateTime>
+  <GameVersion>0.2.5954.26176</GameVersion>
+  <Title>mines</Title>
+  <Description>​</Description>
+  <Author>Anders142536</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+	<Instructions>
+# Setup
+alias dsen d0
+alias gen d1
+
+alias ratio r0
+alias hor r1
+alias ver r2
+
+define hashSol HASH("StructureSolarPanelReinforced")
+define hashBat HASH("StructureBattery")
+define hashMin HASH("StructureDeepMiner")
+
+loop:
+
+jal manageSolarPanels
+
+lb ratio hashBat Ratio Average
+bltal ratio 0.1 stopMiners
+bltal ratio 0.2 startGenerator
+bgtal ratio 0.8 startMiners
+bgtal ratio 0.9 stopGenerator
+
+# done
+sleep 1
+j loop
+
+
+manageSolarPanels:
+l hor dsen Horizontal
+l ver dsen Vertical
+
+## these have to be set based on daylight sensor direction
+add hor hor 90
+add ver ver 90
+
+sb hashSol Horizontal hor
+sb hashSol Vertical ver
+j ra
+
+
+startGenerator:
+s gen On 1
+j ra
+
+
+stopGenerator:
+s gen On 0
+j ra
+
+
+startMiners:
+sb hashMin On 1
+j ra
+
+
+stopMiners:
+sb hashMin On 0
+j ra
+
+
+
+	</Instructions>
+</InstructionData>
