@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>134087458468278695</DateTime>
+  <GameVersion>0.2.5954.26176</GameVersion>
+  <Title>minesWithCentrifuge</Title>
+  <Description>​</Description>
+  <Author>Anders142536</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+	<Instructions>
+# WIP
+# deep miner -> centrifuges -> arc furnace -> vending machine
+
+# Setup
+alias dSensor d0
+alias dConsole d1
+
+alias rRatio r0
+alias rBatteryOutput r1
+alias rHorizontal r2
+alias rVertical r3
+
+define debugValue db Setting
+define Battery HASH("StructureBattery")
+define Solar HASH("StructureSolarPanelReinforced")
+define Centrifuge HASH("StructureCentrifuge")
+define ArcFurnace HASH("StructureArcFurnace")
+
+dConsole Mode 3
+
+loop:
+debugValue 1
+
+jal manageSolarPanels
+jal displayCurrentPowerUsage
+
+
+lb rRatio Battery Ratio Average
+bltal rRatio 0.2 stopArcFurnace
+bgtal
+
+
+# done
+sleep 1
+j loop
+
+
+manageSolarPanels:
+debugValue 2
+l rHorizontal dSensor Horizontal
+l rVertical dSensor Vertical
+
+# these have to be set based on daylight sensor direction or the daylight
+# sensor adjusted
+add rHorizontal rHorizontal 90
+add rVertical rVertical 90
+
+sb Solar Horizontal rHorizontal
+sb Solar Vertical rVertical
+j ra
+
+displayCurrentPowerUsage:
+debugValue 3
+lb rBatteryOutput Battery PowerActual Sum
+s dConsole Setting rBatteryOutput
+j ra
+
+stopArcFurnace:
+debugvalue 4
+s ArcFurnace On 0
+j ra
+
+startArcFurnace:
+debugvalue 5
+s ArcFurnace On 1
+j ra
+	</Instructions>
+</InstructionData>
